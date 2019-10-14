@@ -1,0 +1,26 @@
+<div *ngIf="product">
+  <section class="section">
+    <h1>Product: {{product.name}}</h1>
+    <img [src]="product.image" />
+    <table class="table">
+      <tbody>
+        <tr>
+          <td>Name</td>
+          <td>{{product.name}}</td>
+        </tr>
+        <tr>
+          <td>Category</td>
+          <td>{{product.category}}</td>
+        </tr>
+        <tr>
+            <td>Price</td>
+            <td>{{product.price}}</td>
+          </tr>
+          <tr>
+              <td>Description</td>
+              <td>{{product.description}}</td>
+            </tr>
+      </tbody>
+    </table>
+  </section>
+</div>

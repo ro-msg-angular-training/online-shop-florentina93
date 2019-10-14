@@ -1,0 +1,25 @@
+<div class="div">
+  <h1>Products</h1>
+  <table class="table">
+    <thead>
+      <tr>
+        <th class="th">Category</th>
+        <th class="th">Product Name</th>
+        <th class="th">Price</th>
+        <th class="th"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="products" *ngFor="let product of products">
+        <td class="td">{{product.category}}</td>
+        <td class="td">{{product.name}}</td>
+        <td class="td">{{product.price}}</td>
+        <td class="td">
+          <button [title]="product.name + ' details'" (click)="onSelectProduct(product)">></button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <app-product-detail [product]="selectedProduct"></app-product-detail>
+</div>
