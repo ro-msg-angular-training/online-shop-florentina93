@@ -1,26 +1,43 @@
 <div *ngIf="product">
-  <section class="section">
-    <h1>Product: {{product.name}}</h1>
-    <img [src]="product.image" />
-    <table class="table">
-      <tbody>
-        <tr>
-          <td>Name</td>
-          <td>{{product.name}}</td>
-        </tr>
-        <tr>
-          <td>Category</td>
-          <td>{{product.category}}</td>
-        </tr>
-        <tr>
-            <td>Price</td>
-            <td>{{product.price}}</td>
-          </tr>
-          <tr>
+  <div class="container">
+    <div class="row">
+      <h2 class="col-sm-9">Product: {{product.name}}</h2>
+      <div class="col">
+        <button class="btn btn-primary" (click)="addToShoppingCart(product)">ADD</button>
+      </div>
+      <div class="col">
+        <button class="btn btn-info">EDIT</button>
+      </div>
+      <div class="col">
+        <button class="btn btn-danger">DELETE</button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-10">
+        <table class="table table-borderless">
+          <tbody>
+            <tr>
+              <td>Name</td>
+              <td>{{product.name}}</td>
+            </tr>
+            <tr>
+              <td>Category</td>
+              <td>{{product.category}}</td>
+            </tr>
+            <tr>
+              <td>Price</td>
+              <td>{{product.price}} RON</td>
+            </tr>
+            <tr>
               <td>Description</td>
               <td>{{product.description}}</td>
             </tr>
-      </tbody>
-    </table>
-  </section>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-sm-2">
+        <img class="image" [src]="product.image" />
+      </div>
+    </div>
+  </div>
 </div>

@@ -1,25 +1,33 @@
-<div class="div">
-  <h1>Products</h1>
-  <table class="table">
-    <thead>
-      <tr>
-        <th class="th">Category</th>
-        <th class="th">Product Name</th>
-        <th class="th">Price</th>
-        <th class="th"></th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr class="products" *ngFor="let product of products">
-        <td class="td">{{product.category}}</td>
-        <td class="td">{{product.name}}</td>
-        <td class="td">{{product.price}}</td>
-        <td class="td">
-          <button [title]="product.name + ' details'" (click)="onSelectProduct(product)">></button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-  <app-product-detail [product]="selectedProduct"></app-product-detail>
+<div class="container">
+  <div class="row">
+    <h2 class="col-sm-10">Products</h2>
+    <div class="col">
+      <button class="btn btn-primary" routerLink="/shoppingcart" routerLinkActive="active">CART</button>
+    </div>
+    <div class="col">
+      <button class="btn btn-primary">ADD</button>
+    </div>
+  </div>
+  <div class="row">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th class="th">Category</th>
+          <th class="th">Product Name</th>
+          <th class="th">Price</th>
+          <th class="th"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let product of products">
+          <td class="td">{{product.category}}</td>
+          <td class="td">{{product.name}}</td>
+          <td class="td">{{product.price}} RON</td>
+          <td class="td">
+            <a routerLink="/product/{{product.id}}" [title]="product.name + ' details'">></a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

@@ -5,3 +5,10 @@
 .table {
   width: 60%;
 }
+
+.image {
+  width: 200px;
+  object-fit: contain;
+  float: right;
+}
+

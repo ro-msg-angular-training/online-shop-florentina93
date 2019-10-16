@@ -8,8 +8,7 @@ import { Product } from '../types';
   styleUrls: ['./product-list.component.css']
 })
 export class ProductListComponent implements OnInit {
-  products: Product[];
-  selectedProduct: Product;
+  private products: Product[];
 
   constructor(private productService: ProductService) { }
 
@@ -20,7 +19,5 @@ export class ProductListComponent implements OnInit {
   initProductList(): void {
     this.productService.getProducts().subscribe(products => this.products = products);
   }
-  onSelectProduct(product: Product): void {
-    this.selectedProduct = product;
-  }
+
 }

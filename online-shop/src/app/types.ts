@@ -6,3 +6,8 @@ export class Product {
   price: number;
   description: string;
 }
+
+export class CartItem {
+  quantity: number;
+  product: Product;
+}

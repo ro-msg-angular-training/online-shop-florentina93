@@ -14,7 +14,8 @@ export class ProductService {
   getProducts(): Observable<Product[]> {
     return of(Object.values(mockData));
   }
-  getProduct(): Observable<Product> {
-    return of(Object.values(mockData)[0]);
+  getProduct(id: number): Observable<Product> {
+    return of(Object.values(mockData).find(product => product.id === id));
   }
+
 }
