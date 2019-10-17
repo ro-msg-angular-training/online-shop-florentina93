@@ -8,6 +8,9 @@ import { ProductListComponent } from './product-list/product-list.component';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
 import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { ProductEditorComponent } from './product-editor/product-editor.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { ProductAddComponent } from './product-add/product-add.component';
 
 @NgModule({
   declarations: [
@@ -15,12 +18,15 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     ProductListComponent,
     ProductDetailComponent,
     ShoppingCartComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    ProductEditorComponent,
+    ProductAddComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    ReactiveFormsModule
   ],
   providers: [
       // no need to place any providers due to the `providedIn` flag...

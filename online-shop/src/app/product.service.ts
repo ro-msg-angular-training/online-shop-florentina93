@@ -30,6 +30,14 @@ export class ProductService {
     return this.httpClient.delete<Product>(`${this.apiURL}products/${id}`, this.httpOptions)
       .pipe(retry(1));
   }
+  editProduct(product: Product): Observable<Product> {
+    const id = product.id;
+    return this.httpClient.put<Product>(`${this.apiURL}products/${id}`, product, this.httpOptions)
+        .pipe(retry(1));
+  }
+  addProduct(product: Product): Observable<Product> {
+    return this.httpClient.post<Product>(`${this.apiURL}products`, product).pipe(retry(1));
+  }
 
   private handleError(error: HttpErrorResponse) {
     console.log(error);

@@ -6,7 +6,7 @@
         <button class="btn btn-primary" (click)="addToShoppingCart(product)">ADD</button>
       </div>
       <div class="col">
-        <button class="btn btn-info">EDIT</button>
+        <button class="btn btn-info" routerLink="/product-edit/{{product.id}}" routerLinkActive="active" (click)="onEditProduct(product.id)">EDIT</button>
       </div>
       <div class="col">
         <button class="btn btn-danger" (click)="onDeleteProduct(product.id)">DELETE</button>
@@ -39,6 +39,5 @@
         <img class="image" [src]="product.image" />
       </div>
     </div>
-
   </div>
 </div>

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CartItem, Product, Order, ProductOrder } from '../types';
 import { ShoppingCartService } from '../shopping-cart.service';
 import { Location } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-shopping-cart',
@@ -11,7 +12,7 @@ import { Location } from '@angular/common';
 export class ShoppingCartComponent implements OnInit {
   private cartItems: CartItem[];
 
-  constructor(private shoppingCartService: ShoppingCartService, private location: Location) { }
+  constructor(private shoppingCartService: ShoppingCartService, private router: Router) { }
 
   ngOnInit() {
     this.initShoppingCartList();
@@ -30,7 +31,10 @@ export class ShoppingCartComponent implements OnInit {
     const product: ProductOrder = { productId: 1, quantity: 2 };
     productsArr.push(product);
     const mockOrder: Order = { customer: 'doej', products: productsArr };
-    this.shoppingCartService.createNewOrder(mockOrder).subscribe();
+    this.shoppingCartService.createNewOrder(mockOrder).subscribe(() => {
+      console.log('Created order');
+      this.router.navigateByUrl('/products');
+    });
     console.log(this.cartItems);
   }
 

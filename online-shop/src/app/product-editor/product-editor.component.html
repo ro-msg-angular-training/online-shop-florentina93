@@ -1,0 +1,58 @@
+<div class="container" *ngIf="product && productForm">
+  <form class="form-horizontal" [formGroup]="productForm" (ngSubmit)="onSaveClick()">
+    <fieldset>
+      <legend>Edit: {{product.name}}</legend>
+      <div class="form-group">
+        <label class="col-md-3 control-label" for="name">Name</label>
+        <div class="col-md-9">
+          <input formControlName="name" id="name" type="text" class="form-control input-md">
+          <span class="help-block" *ngIf="!productForm.get('name').valid && productForm.get('name').touched">
+            Please enter a product name!
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-md-3 control-label" for="category">Category</label>
+        <div class="col-md-9">
+          <input formControlName="category" id="category" type="text" class="form-control input-md">
+          <span class="help-block" *ngIf="!productForm.get('category').valid && productForm.get('category').touched">
+              Please enter a category!
+            </span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-md-3 control-label" for="image">Image</label>
+        <div class="col-md-9">
+          <input formControlName="image" id="image" type="text" class="form-control input-md">
+          <span class="help-block" *ngIf="!productForm.get('image').valid && productForm.get('image').touched">
+              Please enter an image link!
+            </span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-md-3 control-label" for="price">Price</label>
+        <div class="col-md-9">
+          <input formControlName="price" id="price" type="text" class="form-control input-md">
+          <span class="help-block" *ngIf="!productForm.get('price').valid && productForm.get('price').touched">
+            <span *ngIf="productForm.get('price').errors['thePriceIsNotNumber']">Please enter a valid number!</span>
+            <span *ngIf="productForm.get('price').errors['required']">Please enter a price!</span>
+            </span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-12">
+          <input formControlName="description" class="form-control" id="description">
+          <span class="help-block" *ngIf="!productForm.get('description').valid && productForm.get('description').touched">
+              Please enter a description!
+            </span>
+        </div>
+      </div>
+      <button class="btn btn-light" type="reset" (click)="onCancelClick()">CANCEL</button>
+      <button class="btn btn-primary" type="submit" [disabled]="!productForm.valid || productForm.untouched">SAVE</button>
+    </fieldset>
+  </form>
+</div>

@@ -45,6 +45,10 @@ export class ProductDetailComponent implements OnInit {
     }
   }
 
+  onEditProduct(id: number) {
+    console.log('on edit' + id);
+  }
+
   goBack(): void {
     this.location.back();
   }
