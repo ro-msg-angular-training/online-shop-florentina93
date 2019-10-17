@@ -9,7 +9,7 @@
         <button class="btn btn-info">EDIT</button>
       </div>
       <div class="col">
-        <button class="btn btn-danger">DELETE</button>
+        <button class="btn btn-danger" (click)="onDeleteProduct(product.id)">DELETE</button>
       </div>
     </div>
     <div class="row">
@@ -39,5 +39,6 @@
         <img class="image" [src]="product.image" />
       </div>
     </div>
+
   </div>
 </div>

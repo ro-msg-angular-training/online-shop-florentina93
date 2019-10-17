@@ -36,6 +36,15 @@ export class ProductDetailComponent implements OnInit {
     alert('Product added to shopping cart!');
   }
 
+  onDeleteProduct(id: number) {
+    if (confirm('Are you sure you want to remove product ' + this.product.name)) {
+      this.productService.deleteProduct(id).subscribe(() => {
+        this.shoppingCartService.deleteCartItem(this.product);
+        this.location.back();
+      });
+    }
+  }
+
   goBack(): void {
     this.location.back();
   }

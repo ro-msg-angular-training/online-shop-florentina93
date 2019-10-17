@@ -1,21 +1,37 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
+import { retry, catchError } from 'rxjs/operators';
 import { Product } from './types';
-import mockData from '../assets/products.json';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
+  private apiURL = 'http://localhost:3000/';
+  private httpOptions = {
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json'
+    }),
+  };
 
-  constructor() {}
+  constructor(private httpClient: HttpClient) { }
 
   getProducts(): Observable<Product[]> {
-    return of(Object.values(mockData));
+    return this.httpClient.get<Product[]>(`${this.apiURL}products`)
+      .pipe(retry(1));
+
   }
   getProduct(id: number): Observable<Product> {
-    return of(Object.values(mockData).find(product => product.id === id));
+   return this.httpClient.get<Product>(`${this.apiURL}products/${id}`);
+  }
+  deleteProduct(id: number): Observable<Product> {
+    return this.httpClient.delete<Product>(`${this.apiURL}products/${id}`, this.httpOptions)
+      .pipe(retry(1));
   }
 
+  private handleError(error: HttpErrorResponse) {
+    console.log(error);
+  }
 }
