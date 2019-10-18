@@ -2,14 +2,14 @@
   <div class="container">
     <div class="row">
       <h2 class="col-sm-9">Product: {{product.name}}</h2>
-      <div class="col">
+      <div class="col" *ngIf="isAdmin || isCustomer">
         <button class="btn btn-primary" (click)="addToShoppingCart(product)">ADD</button>
       </div>
       <div class="col">
-        <button class="btn btn-info" routerLink="/product-edit/{{product.id}}" routerLinkActive="active" (click)="onEditProduct(product.id)">EDIT</button>
+        <button [disabled]="!isAdmin" class="btn btn-info" (click)="onEditProduct(product.id)">EDIT</button>
       </div>
       <div class="col">
-        <button class="btn btn-danger" (click)="onDeleteProduct(product.id)">DELETE</button>
+        <button [disabled]="!isAdmin" class="btn btn-danger" (click)="onDeleteProduct(product.id)">DELETE</button>
       </div>
     </div>
     <div class="row">

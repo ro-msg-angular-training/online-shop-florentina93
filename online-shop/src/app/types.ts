@@ -8,6 +8,7 @@ export class Product {
 }
 
 export class CartItem {
+  productId: number;
   quantity: number;
   product: Product;
 }
@@ -17,7 +18,19 @@ export class ProductOrder {
   quantity: number;
 }
 
-export class Order {
+export interface Order {
   customer: string;
   products: ProductOrder[];
+}
+
+export interface User {
+  username: string;
+  fullname: string;
+  roles: string[];
+}
+
+export enum Role {
+  USER = 'user',
+  CUSTOMER = 'customer',
+  ADMIN = 'admin'
 }

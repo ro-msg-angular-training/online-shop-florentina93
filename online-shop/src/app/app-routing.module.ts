@@ -6,32 +6,42 @@ import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { ProductEditorComponent } from './product-editor/product-editor.component';
 import { ProductAddComponent } from './product-add/product-add.component';
-
+import { LoginComponent } from './login/login.component';
+import { AuthGuard } from './auth/auth.guard';
 
 const routes: Routes = [
   { path: '',
-    redirectTo: '/products',
+    redirectTo: '/login',
     pathMatch: 'full'
   },
   {
+    path: 'login',
+    component: LoginComponent
+  },
+  {
     path: 'product/:id',
-    component: ProductDetailComponent
+    component: ProductDetailComponent,
+    canActivate: [AuthGuard],
   },
   {
     path: 'products',
-    component: ProductListComponent
+    component: ProductListComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'product-edit/:id',
-    component: ProductEditorComponent
+    component: ProductEditorComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'product-add',
-    component: ProductAddComponent
+    component: ProductAddComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'shoppingcart',
-    component: ShoppingCartComponent
+    component: ShoppingCartComponent,
+    canActivate: [AuthGuard],
   },
   {
     path: '**',

@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Product } from '../types';
-import { ActivatedRoute } from '@angular/router';
+import { Product, User, Role } from '../types';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { ProductService } from '../product.service';
 import { ShoppingCartService } from '../shopping-cart.service';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-product-detail',
@@ -13,16 +14,31 @@ import { ShoppingCartService } from '../shopping-cart.service';
 export class ProductDetailComponent implements OnInit {
 
   private product: Product;
+  private isCustomer = false;
+  private isAdmin = false;
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private productService: ProductService,
     private shoppingCartService: ShoppingCartService,
+    private authService: AuthService,
     private location: Location
   ) {}
 
   ngOnInit() {
     this.initProduct();
+    const user: User = this.authService.getCurrentUser();
+    if (user) {
+     const foundAdminRole = user.roles.find(role => role === Role.ADMIN);
+     const foundCustomerRole = user.roles.find(role => role === Role.CUSTOMER);
+     if (foundAdminRole) {
+      this.isAdmin = true;
+     }
+     if(foundCustomerRole) {
+       this.isCustomer = true;
+     }
+    }
   }
 
   initProduct(): void {
@@ -46,10 +62,6 @@ export class ProductDetailComponent implements OnInit {
   }
 
   onEditProduct(id: number) {
-    console.log('on edit' + id);
-  }
-
-  goBack(): void {
-    this.location.back();
+    this.router.navigateByUrl('/product-edit/' + id);
   }
 }

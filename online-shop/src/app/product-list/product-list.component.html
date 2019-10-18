@@ -1,11 +1,11 @@
 <div class="container">
-  <div class="row">
+  <div class="row" *ngIf="products">
     <h2 class="col-sm-10">Products</h2>
-    <div class="col">
+    <div class="col" *ngIf="isAdmin || isCustomer">
       <button class="btn btn-primary" routerLink="/shoppingcart" routerLinkActive="active">CART</button>
     </div>
     <div class="col">
-      <button class="btn btn-primary" routerLink="/product-add" routerLinkActive="active">ADD</button>
+      <button [disabled]="!isAdmin" class="btn btn-primary" routerLink="/product-add" routerLinkActive="active">ADD</button>
     </div>
   </div>
   <div class="row">

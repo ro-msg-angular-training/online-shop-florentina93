@@ -11,6 +11,8 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { ProductEditorComponent } from './product-editor/product-editor.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ProductAddComponent } from './product-add/product-add.component';
+import { LoginComponent } from './login/login.component';
+import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +22,9 @@ import { ProductAddComponent } from './product-add/product-add.component';
     ShoppingCartComponent,
     PageNotFoundComponent,
     ProductEditorComponent,
-    ProductAddComponent
+    ProductAddComponent,
+    LoginComponent,
+    LoadingSpinnerComponent
   ],
   imports: [
     BrowserModule,

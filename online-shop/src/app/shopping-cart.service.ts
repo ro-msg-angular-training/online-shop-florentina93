@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Product, CartItem, Order } from './types';
-import { Observable, of } from 'rxjs';
+import { Product, CartItem, Order, ProductOrder } from './types';
+import { Observable, of, throwError } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { retry } from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -14,11 +14,11 @@ export class ShoppingCartService {
   constructor(private httpClient: HttpClient) { }
 
   addCartItem(inputProduct: Product): void {
-    const foundCartItem: CartItem = this.cartItems.find(item => item.product.id === inputProduct.id);
+    const foundCartItem: CartItem = this.cartItems.find(item => item.productId === inputProduct.id);
     if (foundCartItem) {
       foundCartItem.quantity++;
     } else {
-      const newCartItem: CartItem = { quantity: 1, product: inputProduct };
+      const newCartItem: CartItem = { productId: inputProduct.id, quantity: 1, product: inputProduct};
       this.cartItems.push(newCartItem);
     }
   }
@@ -41,18 +41,22 @@ export class ShoppingCartService {
       foundCartItem.product = product;
     }
   }
+  resetShoppingCartList() {
+    this.cartItems = [];
+  }
 
-  createNewOrder(bodyOrder: Order): Observable<Order> {
+  createNewOrder(productsArr: ProductOrder[]): Observable<any> {
     const body = {
       customer: 'doej',
-      products: [
-        {
-          productId: 2,
-          quantity: 1
-        }
-      ]
+      products: productsArr
     };
-    return this.httpClient.post<Order>('http://localhost:3000/orders', body)
-      .pipe(retry(1));
+    console.log(body);
+    return this.httpClient.post<any>('http://localhost:3000/orders', body)
+      .pipe(map(response => {
+        if (response) {
+          console.log(response);
+        }
+        return response;
+      }), catchError(errorResponse => throwError(errorResponse)));
   }
 }
