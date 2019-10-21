@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Product } from '../types';
-import { ProductService } from '../product.service';
+import { Product } from '../../../shared/types';
+import { ProductService } from '../../../core/http/product/product.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
-import { ShoppingCartService } from '../shopping-cart.service';
+import { ValidationService } from '../../../shared/service/validation.service';
+import { CartService } from '../../../core/services/cart.service';
 
 @Component({
   selector: 'app-product-editor',
@@ -19,8 +20,9 @@ export class ProductEditorComponent implements OnInit {
     private productService: ProductService,
     private route: ActivatedRoute,
     private router: Router,
-    private shoppingCartService: ShoppingCartService,
-    private location: Location) { }
+    private cartService: CartService,
+    private location: Location,
+    private validation: ValidationService) { }
 
   ngOnInit() {
     this.initProductForm();
@@ -35,17 +37,10 @@ export class ProductEditorComponent implements OnInit {
           name: new FormControl(product.name, Validators.required),
           category: new FormControl(product.category, Validators.required),
           image: new FormControl(product.image, Validators.required),
-          price: new FormControl(product.price, [Validators.required, this.priceValidation]),
+          price: new FormControl(product.price, [Validators.required, this.validation.priceValidation]),
           description: new FormControl(product.description, Validators.required)
         });
       });
-  }
-
-  priceValidation(formControl: FormControl): { [s: string]: boolean } {
-    if (isNaN(formControl.value)) {
-      return { thePriceIsNotNumber: true };
-    }
-    return null;
   }
 
   onCancelClick() {
@@ -60,7 +55,7 @@ export class ProductEditorComponent implements OnInit {
     this.product.description = formValues.description;
     console.log(this.product);
     this.productService.editProduct(this.product).subscribe(() => {
-      this.shoppingCartService.updateCartItems(this.product);
+      this.cartService.updateCartItems(this.product);
       this.router.navigateByUrl('/products');
     });
   }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ProductService } from '../product.service';
-import { Product, User, Role } from '../types';
-import { AuthService } from '../auth.service';
+import { ProductService } from '../../../core/http/product/product.service';
+import { Product, User, Role } from '../../../shared/types';
+import { AuthService } from '../../../core/http/auth/auth.service';
 import { ResolveStart } from '@angular/router';
 
 @Component({
@@ -26,7 +26,7 @@ export class ProductListComponent implements OnInit {
      if (foundAdminRole) {
       this.isAdmin = true;
      }
-     if(foundCustomerRole) {
+     if (foundCustomerRole) {
        this.isCustomer = true;
      }
     }

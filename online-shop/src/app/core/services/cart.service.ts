@@ -1,17 +1,14 @@
 import { Injectable } from '@angular/core';
-import { Product, CartItem, Order, ProductOrder } from './types';
-import { Observable, of, throwError } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
-import { map, catchError } from 'rxjs/operators';
+import { CartItem, Product } from 'src/app/shared/types';
+import { Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ShoppingCartService {
-
+export class CartService {
   private cartItems: CartItem[] = [];
 
-  constructor(private httpClient: HttpClient) { }
+  constructor() { }
 
   addCartItem(inputProduct: Product): void {
     const foundCartItem: CartItem = this.cartItems.find(item => item.productId === inputProduct.id);
@@ -43,20 +40,5 @@ export class ShoppingCartService {
   }
   resetShoppingCartList() {
     this.cartItems = [];
-  }
-
-  createNewOrder(productsArr: ProductOrder[]): Observable<any> {
-    const body = {
-      customer: 'doej',
-      products: productsArr
-    };
-    console.log(body);
-    return this.httpClient.post<any>('http://localhost:3000/orders', body)
-      .pipe(map(response => {
-        if (response) {
-          console.log(response);
-        }
-        return response;
-      }), catchError(errorResponse => throwError(errorResponse)));
   }
 }

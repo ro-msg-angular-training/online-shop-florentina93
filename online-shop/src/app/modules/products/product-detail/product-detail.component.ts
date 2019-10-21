@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Product, User, Role } from '../types';
+import { Product, User, Role } from '../../../shared/types';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
-import { ProductService } from '../product.service';
-import { ShoppingCartService } from '../shopping-cart.service';
-import { AuthService } from '../auth.service';
+import { ProductService } from '../../../core/http/product/product.service';
+import { AuthService } from '../../../core/http/auth/auth.service';
+import { CartService } from '../../../core/services/cart.service';
 
 @Component({
   selector: 'app-product-detail',
@@ -21,7 +21,7 @@ export class ProductDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private productService: ProductService,
-    private shoppingCartService: ShoppingCartService,
+    private cartService: CartService,
     private authService: AuthService,
     private location: Location
   ) {}
@@ -35,7 +35,7 @@ export class ProductDetailComponent implements OnInit {
      if (foundAdminRole) {
       this.isAdmin = true;
      }
-     if(foundCustomerRole) {
+     if (foundCustomerRole) {
        this.isCustomer = true;
      }
     }
@@ -48,14 +48,14 @@ export class ProductDetailComponent implements OnInit {
   }
 
   addToShoppingCart(product: Product) {
-    this.shoppingCartService.addCartItem(product);
+    this.cartService.addCartItem(product);
     alert('Product added to shopping cart!');
   }
 
   onDeleteProduct(id: number) {
     if (confirm('Are you sure you want to remove product ' + this.product.name)) {
       this.productService.deleteProduct(id).subscribe(() => {
-        this.shoppingCartService.deleteCartItem(this.product);
+        this.cartService.deleteCartItem(this.product);
         this.location.back();
       });
     }

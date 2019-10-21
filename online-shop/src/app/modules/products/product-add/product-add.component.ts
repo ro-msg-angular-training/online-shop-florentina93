@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { ProductService } from '../product.service';
+import { ProductService } from '../../../core/http/product/product.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
-import { Product } from '../types';
+import { Product } from '../../../shared/types';
+import { ValidationService } from '../../../shared/service/validation.service';
 
 @Component({
   selector: 'app-product-add',
@@ -15,6 +16,7 @@ export class ProductAddComponent implements OnInit {
 
   constructor(
     private productService: ProductService,
+    private validation: ValidationService,
     private router: Router,
     private location: Location) { }
 
@@ -24,7 +26,7 @@ export class ProductAddComponent implements OnInit {
       name: new FormControl(null, Validators.required),
       category: new FormControl(null, Validators.required),
       image: new FormControl(null, Validators.required),
-      price: new FormControl(null, [Validators.required, this.priceValidation]),
+      price: new FormControl(null, [Validators.required, this.validation.priceValidation]),
       description: new FormControl(null, Validators.required)
     });
   }
@@ -48,12 +50,4 @@ export class ProductAddComponent implements OnInit {
       this.router.navigateByUrl('/products');
     });
   }
-
-  priceValidation(formControl: FormControl): { [s: string]: boolean } {
-    if (isNaN(formControl.value)) {
-      return { thePriceIsNotNumber: true };
-    }
-    return null;
-  }
-
 }

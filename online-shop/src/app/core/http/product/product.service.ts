@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
-import { Product } from './types';
+import { Product } from '../../../shared/types';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 
 
@@ -37,9 +37,5 @@ export class ProductService {
   }
   addProduct(product: Product): Observable<Product> {
     return this.httpClient.post<Product>(`${this.apiURL}products`, product).pipe(retry(1));
-  }
-
-  private handleError(error: HttpErrorResponse) {
-    console.log(error);
   }
 }

@@ -4,15 +4,15 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { ProductListComponent } from './product-list/product-list.component';
-import { ProductDetailComponent } from './product-detail/product-detail.component';
-import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
-import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-import { ProductEditorComponent } from './product-editor/product-editor.component';
+import { ProductListComponent } from './modules/products/product-list/product-list.component';
+import { ProductDetailComponent } from './modules/products/product-detail/product-detail.component';
+import { ShoppingCartComponent } from './modules/shopping-cart/shopping-cart/shopping-cart.component';
+import { PageNotFoundComponent } from './modules/page-not-found/page-not-found.component';
+import { ProductEditorComponent } from './modules/products/product-editor/product-editor.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { ProductAddComponent } from './product-add/product-add.component';
-import { LoginComponent } from './login/login.component';
-import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.component';
+import { ProductAddComponent } from './modules/products/product-add/product-add.component';
+import { LoginComponent } from './modules/auth/login/login.component';
+import { LoadingSpinnerComponent } from './shared/component/loading-spinner/loading-spinner.component';
 
 @NgModule({
   declarations: [

@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { CartItem, Product, Order, ProductOrder } from '../types';
-import { ShoppingCartService } from '../shopping-cart.service';
+import { CartItem, Product, ProductOrder } from '../../../shared/types';
+import { ShoppingCartService } from '../../../core/http/shopping-cart/shopping-cart.service';
 import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { Location } from '@angular/common';
+import { CartService } from '../../../core/services/cart.service';
 
 @Component({
   selector: 'app-shopping-cart',
@@ -16,20 +17,25 @@ export class ShoppingCartComponent implements OnInit {
   private emptyShoppingCart = true;
   private checkoutDone = false;
 
-  constructor(private shoppingCartService: ShoppingCartService, private router: Router, private location: Location) { }
+  constructor(private shoppingCartService: ShoppingCartService,
+              private cartService: CartService,
+              private router: Router, private location: Location) { }
 
   ngOnInit() {
     this.initShoppingCartList();
   }
 
   initShoppingCartList(): void {
-    this.shoppingCartService.getCartItems().subscribe(items => this.cartItems = items);
+    this.cartService.getCartItems().subscribe(items => this.cartItems = items);
     if (this.cartItems.length > 0) {
       this.emptyShoppingCart = false;
     }
   }
   deleteFromShoppingCart(product: Product): void {
-    this.shoppingCartService.deleteCartItem(product);
+    this.cartService.deleteCartItem(product);
+    if (this.cartItems.length === 0 ) {
+      this.emptyShoppingCart = true;
+    }
   }
 
   // Needs refactoring after fix the error
@@ -50,7 +56,7 @@ export class ShoppingCartComponent implements OnInit {
         if (error.status === 201) {
           this.checkoutDone = true;
           this.emptyShoppingCart = true;
-          this.shoppingCartService.resetShoppingCartList();
+          this.cartService.resetShoppingCartList();
         }
         this.errorMessage = this.getErrorMessageByStatus(error.status);
         console.log(error);
