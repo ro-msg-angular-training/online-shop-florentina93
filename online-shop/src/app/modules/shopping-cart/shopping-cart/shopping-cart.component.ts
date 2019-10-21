@@ -69,7 +69,7 @@ export class ShoppingCartComponent implements OnInit {
     this.location.back();
   }
 
-  getErrorMessageByStatus(status: number): string {
+  private getErrorMessageByStatus(status: number): string {
     switch (status) {
       case 401: {
         return 'User or product not found';

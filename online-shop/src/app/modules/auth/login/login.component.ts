@@ -57,7 +57,7 @@ export class LoginComponent implements OnInit {
     console.log(this.form);
   }
 
-  getErrorMessageByStatus(status: number): string {
+  private getErrorMessageByStatus(status: number): string {
     switch (status) {
       case 401: {
         return 'Username or password is incorrect';
