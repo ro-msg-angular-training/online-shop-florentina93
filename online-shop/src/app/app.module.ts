@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
+import { StoreModule } from '@ngrx/store';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -13,6 +14,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ProductAddComponent } from './modules/products/product-add/product-add.component';
 import { LoginComponent } from './modules/auth/login/login.component';
 import { LoadingSpinnerComponent } from './shared/component/loading-spinner/loading-spinner.component';
+import { productListReducer } from './store/product-list.reducer';
 
 @NgModule({
   declarations: [
@@ -30,6 +32,7 @@ import { LoadingSpinnerComponent } from './shared/component/loading-spinner/load
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    StoreModule.forRoot({productList: productListReducer}),
     ReactiveFormsModule
   ],
   providers: [

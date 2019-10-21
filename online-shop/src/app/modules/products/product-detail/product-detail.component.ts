@@ -5,6 +5,10 @@ import { Location } from '@angular/common';
 import { ProductService } from '../../../core/http/product/product.service';
 import { AuthService } from '../../../core/http/auth/auth.service';
 import { CartService } from '../../../core/services/cart.service';
+import { Store } from '@ngrx/store';
+import * as ProductListActions from '../../../store/product-list.actions';
+import * as fromProductList from '../../../store/product-list.reducer';
+
 
 @Component({
   selector: 'app-product-detail',
@@ -23,7 +27,8 @@ export class ProductDetailComponent implements OnInit {
     private productService: ProductService,
     private cartService: CartService,
     private authService: AuthService,
-    private location: Location
+    private location: Location,
+    private store: Store<fromProductList.IAppState>
   ) {}
 
   ngOnInit() {
@@ -53,6 +58,7 @@ export class ProductDetailComponent implements OnInit {
   }
 
   onDeleteProduct(id: number) {
+    // this.store.dispatch(new ProductListActions.DeleteProduct(id));
     if (confirm('Are you sure you want to remove product ' + this.product.name)) {
       this.productService.deleteProduct(id).subscribe(() => {
         this.cartService.deleteCartItem(this.product);
@@ -62,6 +68,7 @@ export class ProductDetailComponent implements OnInit {
   }
 
   onEditProduct(id: number) {
+   // this.store.dispatch(new ProductListActions.EditProduct({index: id, product: this.product}));
     this.router.navigateByUrl('/product-edit/' + id);
   }
 }

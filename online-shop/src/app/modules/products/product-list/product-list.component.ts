@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ProductService } from '../../../core/http/product/product.service';
 import { Product, User, Role } from '../../../shared/types';
 import { AuthService } from '../../../core/http/auth/auth.service';
-import { ResolveStart } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import * as fromProductList from '../../../store/product-list.reducer';
 
 @Component({
   selector: 'app-product-list',
@@ -10,14 +12,17 @@ import { ResolveStart } from '@angular/router';
   styleUrls: ['./product-list.component.css']
 })
 export class ProductListComponent implements OnInit {
+  // private products: Observable<{ products: Product[] }>;
   private products: Product[];
   private isCustomer = false;
   private isAdmin = false;
 
   constructor(private productService: ProductService,
-              private authService: AuthService) { }
+              private authService: AuthService,
+              private store: Store<fromProductList.IAppState>) { }
 
   ngOnInit() {
+   // this.products = this.store.select('productList');
     this.initProductList();
     const user: User = this.authService.getCurrentUser();
     if (user) {
