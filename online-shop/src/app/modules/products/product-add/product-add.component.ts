@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { ProductService } from '../../../core/http/product/product.service';
-import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { Product } from '../../../shared/types';
 import { ValidationService } from '../../../shared/service/validation.service';
 import { Store } from '@ngrx/store';
-import * as ProductListActions from '../../../store/product-list.actions';
-import * as fromProductList from '../../../store/product-list.reducer';
+import * as ProductActions from '../store/product.actions';
+import * as fromApp from '../../../store/app.reducer';
+
 
 
 @Component({
@@ -19,11 +18,9 @@ export class ProductAddComponent implements OnInit {
   addProductForm: FormGroup;
 
   constructor(
-    private productService: ProductService,
     private validation: ValidationService,
-    private router: Router,
     private location: Location,
-    private store: Store<fromProductList.IAppState>) { }
+    private store: Store<fromApp.IAppState>) { }
 
 
   ngOnInit() {
@@ -36,9 +33,6 @@ export class ProductAddComponent implements OnInit {
     });
   }
 
-  onCancelClick() {
-    this.location.back();
-  }
   onSaveClick() {
     const formValues = this.addProductForm.value;
     const product: Product = {
@@ -49,11 +43,10 @@ export class ProductAddComponent implements OnInit {
       image: formValues.image,
       description: formValues.description
     };
-    console.log(product);
-   // this.store.dispatch(new ProductListActions.AddProduct(product));
-    this.productService.addProduct(product).subscribe(() => {
-      console.log('Created product');
-      this.router.navigateByUrl('/products');
-    });
+    this.store.dispatch(new ProductActions.AddProduct(product));
+  }
+
+  onCancelClick() {
+    this.location.back();
   }
 }

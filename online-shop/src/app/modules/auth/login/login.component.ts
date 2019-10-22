@@ -4,6 +4,9 @@ import { AuthService } from '../../../core/http/auth/auth.service';
 import { first } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { User } from '../../../shared/types';
+import * as fromApp from '../../../store/app.reducer';
+import { Store } from '@ngrx/store';
+import * as AuthActions from '../../auth/store/auth.actions';
 
 @Component({
   selector: 'app-login',
@@ -20,6 +23,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthService,
+    private store: Store<fromApp.IAppState>,
     private router: Router
   ) { }
 
@@ -27,6 +31,10 @@ export class LoginComponent implements OnInit {
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
       password: ['', Validators.required]
+    });
+    this.store.select('auth').subscribe(authState => {
+      this.isLoading = authState.loading;
+      this.currentUser = authState.user;
     });
   }
 
@@ -39,6 +47,10 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.invalid) {
       return;
     }
+    this.store.dispatch(new AuthActions.LoginStart({
+      username: this.form.username.value,
+      password: this.form.password.value
+    }));
 
     this.isLoading = true;
     this.authService.login(this.form.username.value, this.form.password.value)

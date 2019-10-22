@@ -21,7 +21,6 @@ export class ProductService {
   getProducts(): Observable<Product[]> {
     return this.httpClient.get<Product[]>(PRODUCTS_URL)
       .pipe(retry(1));
-
   }
   getProduct(id: number): Observable<Product> {
    return this.httpClient.get<Product>(`${PRODUCTS_URL}/${id}`);

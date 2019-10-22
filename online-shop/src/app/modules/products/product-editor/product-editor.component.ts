@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Product } from '../../../shared/types';
-import { ProductService } from '../../../core/http/product/product.service';
-import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { ValidationService } from '../../../shared/service/validation.service';
-import { CartService } from '../../../core/services/cart.service';
+import * as ProductActions from '../store/product.actions';
+import * as fromApp from '../../../store/app.reducer';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-product-editor',
@@ -17,35 +17,27 @@ export class ProductEditorComponent implements OnInit {
   productForm: FormGroup;
 
   constructor(
-    private productService: ProductService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private cartService: CartService,
     private location: Location,
-    private validation: ValidationService) { }
+    private validation: ValidationService,
+    private store: Store<fromApp.IAppState>) { }
 
   ngOnInit() {
     this.initProductForm();
   }
 
   initProductForm(): void {
-    const id = +this.route.snapshot.paramMap.get('id');
-    this.productService.getProduct(id)
-      .subscribe(product => {
-        this.product = product;
-        this.productForm = new FormGroup({
-          name: new FormControl(product.name, Validators.required),
-          category: new FormControl(product.category, Validators.required),
-          image: new FormControl(product.image, Validators.required),
-          price: new FormControl(product.price, [Validators.required, this.validation.priceValidation]),
-          description: new FormControl(product.description, Validators.required)
-        });
-      });
+    this.store.select('productDetail').subscribe(data => this.product = data.productDetail);
+
+    this.productForm = new FormGroup({
+      name: new FormControl(this.product.name, Validators.required),
+      category: new FormControl(this.product.category, Validators.required),
+      image: new FormControl(this.product.image, Validators.required),
+      price: new FormControl(this.product.price, [Validators.required, this.validation.priceValidation]),
+      description: new FormControl(this.product.description, Validators.required)
+    });
+
   }
 
-  onCancelClick() {
-    this.location.back();
-  }
   onSaveClick() {
     const formValues = this.productForm.value;
     this.product.name = formValues.name;
@@ -53,11 +45,13 @@ export class ProductEditorComponent implements OnInit {
     this.product.price = formValues.price;
     this.product.image = formValues.image;
     this.product.description = formValues.description;
-    console.log(this.product);
-    this.productService.editProduct(this.product).subscribe(() => {
-      this.cartService.updateCartItems(this.product);
-      this.router.navigateByUrl('/products');
-    });
+
+    this.store.dispatch(new ProductActions.EditProduct({id: this.product.id, product: this.product}));
+    //   this.cartService.updateCartItems(this.product);
+  }
+
+  onCancelClick() {
+    this.location.back();
   }
 
 }

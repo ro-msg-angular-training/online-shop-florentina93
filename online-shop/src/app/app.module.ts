@@ -14,7 +14,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ProductAddComponent } from './modules/products/product-add/product-add.component';
 import { LoginComponent } from './modules/auth/login/login.component';
 import { LoadingSpinnerComponent } from './shared/component/loading-spinner/loading-spinner.component';
-import { productListReducer } from './store/product-list.reducer';
+import { EffectsModule } from '@ngrx/effects';
+import { appEffects } from './store/app.effects';
+import * as fromApp from './store/app.reducer';
 
 @NgModule({
   declarations: [
@@ -32,7 +34,8 @@ import { productListReducer } from './store/product-list.reducer';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    StoreModule.forRoot({productList: productListReducer}),
+    StoreModule.forRoot(fromApp.appReducer),
+    EffectsModule.forRoot(appEffects),
     ReactiveFormsModule
   ],
   providers: [
