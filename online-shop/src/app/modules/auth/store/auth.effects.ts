@@ -9,30 +9,25 @@ import { Router } from '@angular/router';
 
 @Injectable()
 export class AuthEffects {
+
+  constructor(private actions$: Actions, private authService: AuthService, private router: Router) { }
+
   @Effect()
   authLogin = this.actions$.pipe(
     ofType(AuthActions.LOGIN_START),
     switchMap((authData: AuthActions.LoginStart) => {
       return this.authService.login(authData.payload.username, authData.payload.password)
-      .pipe(catchError(error => {
-        // ...later implementation
-        return of(new AuthActions.LoginFail({error: error.message}));
-      }),
-      map((resData: User) => {
-        // ...
-        // const userTest: User = resData;
-        return new AuthActions.LoginSuccess({user: resData});
-      }));
+        .pipe(
+          map((resData: User) => {
+            return new AuthActions.LoginSuccess({ user: resData });
+          }),
+          // tap(() => this.router.navigate(['/products'])),
+          catchError(error => {
+            // ...later implementation
+            return of(new AuthActions.LoginFail({ error: error.message, errorStatus: error.status}));
+          })
+        );
     })
   );
 
-  @Effect({dispatch: false})
-  authSuccess = this.actions$.pipe(
-    ofType(AuthActions.LOGIN_SUCCESS),
-    tap(() => {
-      this.router.navigate(['/products']);
-    })
-  );
-
-  constructor(private actions$: Actions, private authService: AuthService, private router: Router) {}
 }

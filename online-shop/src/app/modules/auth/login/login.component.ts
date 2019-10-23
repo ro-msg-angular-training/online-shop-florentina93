@@ -32,10 +32,6 @@ export class LoginComponent implements OnInit {
       username: ['', Validators.required],
       password: ['', Validators.required]
     });
-    this.store.select('auth').subscribe(authState => {
-      this.isLoading = authState.loading;
-      this.currentUser = authState.user;
-    });
   }
 
   // convenience getter for easy access to form fields
@@ -47,11 +43,6 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.invalid) {
       return;
     }
-    this.store.dispatch(new AuthActions.LoginStart({
-      username: this.form.username.value,
-      password: this.form.password.value
-    }));
-
     this.isLoading = true;
     this.authService.login(this.form.username.value, this.form.password.value)
       .pipe(first())
@@ -79,5 +70,4 @@ export class LoginComponent implements OnInit {
       }
     }
   }
-
 }

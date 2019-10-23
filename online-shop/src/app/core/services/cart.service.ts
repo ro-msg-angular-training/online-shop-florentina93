@@ -10,22 +10,24 @@ export class CartService {
 
   constructor() { }
 
-  addCartItem(inputProduct: Product): void {
+  addCartItem(inputProduct: Product): Observable<CartItem> {
     const foundCartItem: CartItem = this.cartItems.find(item => item.productId === inputProduct.id);
     if (foundCartItem) {
       foundCartItem.quantity++;
+      return of(foundCartItem);
     } else {
       const newCartItem: CartItem = { productId: inputProduct.id, quantity: 1, product: inputProduct};
       this.cartItems.push(newCartItem);
+      return of(newCartItem);
     }
   }
 
-  deleteCartItem(inputProduct: Product): void {
+  deleteCartItem(inputProduct: Product): Observable<number> {
     const foundCartItemIndex = this.cartItems.findIndex(item => item.product.id === inputProduct.id);
     if (foundCartItemIndex > -1) {
       this.cartItems.splice(foundCartItemIndex, 1);
     }
-    console.log(this.cartItems);
+    return of(inputProduct.id);
   }
 
   getCartItems(): Observable<CartItem[]> {

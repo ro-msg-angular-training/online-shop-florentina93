@@ -5,6 +5,10 @@ import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { Location } from '@angular/common';
 import { CartService } from '../../../core/services/cart.service';
+import * as fromApp from '../../../store/app.reducer';
+import { Store } from '@ngrx/store';
+import * as ShoppingCartActions from '../store/shopping-cart.actions';
+
 
 @Component({
   selector: 'app-shopping-cart',
@@ -19,21 +23,23 @@ export class ShoppingCartComponent implements OnInit {
 
   constructor(private shoppingCartService: ShoppingCartService,
               private cartService: CartService,
-              private router: Router, private location: Location) { }
+              private router: Router,
+              private location: Location,
+              private store: Store<fromApp.IAppState>) { }
 
   ngOnInit() {
     this.initShoppingCartList();
   }
 
   initShoppingCartList(): void {
-    this.cartService.getCartItems().subscribe(items => this.cartItems = items);
+    this.store.select('cartItems').subscribe(data => this.cartItems = data.cartItems);
     if (this.cartItems.length > 0) {
       this.emptyShoppingCart = false;
     }
   }
   deleteFromShoppingCart(product: Product): void {
-    this.cartService.deleteCartItem(product);
-    if (this.cartItems.length === 0 ) {
+    this.store.dispatch(new ShoppingCartActions.DeleteCartItemSuccess({ id: product.id }));
+    if (this.cartItems.length === 0) {
       this.emptyShoppingCart = true;
     }
   }
@@ -43,25 +49,19 @@ export class ShoppingCartComponent implements OnInit {
   onCheckoutClick() {
     const productsArr: ProductOrder[] = [];
     this.cartItems.forEach(item => {
-      productsArr.push({productId: item.productId, quantity: item.quantity});
+      productsArr.push({ productId: item.productId, quantity: item.quantity });
     });
-    this.shoppingCartService.createNewOrder(productsArr).pipe(first()).subscribe(
-      response => {
-        this.checkoutDone = true;
-        this.emptyShoppingCart = true;
-        console.log(response);
-        this.router.navigateByUrl('/products');
-      },
-      error => {
-        if (error.status === 201) {
+    this.store.dispatch(new ShoppingCartActions.CheckoutCartItems({ productsOrder: productsArr }));
+    this.store.select('cartItems').subscribe(data => {
+      if (data.errorStatus) {
+        if (data.errorStatus === 201) {
           this.checkoutDone = true;
-          this.emptyShoppingCart = true;
-          this.cartService.resetShoppingCartList();
+        } else {
+          this.errorMessage = this.getErrorMessageByStatus(data.errorStatus);
         }
-        this.errorMessage = this.getErrorMessageByStatus(error.status);
-        console.log(error);
+        this.emptyShoppingCart = true;
       }
-    );
+    });
     console.log(this.cartItems);
   }
 
@@ -79,5 +79,4 @@ export class ShoppingCartComponent implements OnInit {
       }
     }
   }
-
 }

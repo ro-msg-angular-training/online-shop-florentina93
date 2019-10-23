@@ -20,7 +20,7 @@ export class LoginSuccess implements Action {
 export class LoginFail implements Action {
   readonly type = LOGIN_FAIL;
 
-  constructor(public payload: {error: string}) {}
+  constructor(public payload: {error: string, errorStatus: number}) {}
 }
 
 export type AuthActions = LoginStart | LoginSuccess | LoginFail;

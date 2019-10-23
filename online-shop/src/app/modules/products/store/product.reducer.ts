@@ -44,11 +44,9 @@ export function productReducer(state: IState = initialState, action: ProductList
         products: [...state.products, action.payload]
       };
     case ProductListActions.EDIT_PRODUCT_SUCCESS:
-      const product = state.products.find(product => product.id === action.payload.id);
       const productIndex = state.products.findIndex(product => product.id === action.payload.id);
-      const updatedProduct = {...product, ...action.payload.product};
       const updatedProducts = [...state.products];
-      updatedProducts[productIndex] = updatedProduct;
+      updatedProducts[productIndex] = action.payload.product;
       return {
         ...state,
         products: updatedProducts,
@@ -57,7 +55,7 @@ export function productReducer(state: IState = initialState, action: ProductList
     case ProductListActions.DELETE_PRODUCT_SUCCESS:
       return {
         ...state,
-        products: state.products.filter(( product ) => {
+        products: state.products.filter((product) => {
           return product.id !== action.payload;
         })
       };

@@ -5,12 +5,14 @@ export interface IState {
   user: User;
   loading: boolean;
   authError: string;
+  authErrorStatus: number;
 }
 
 const initialState: IState = {
   user: null,
   loading: false,
-  authError: null
+  authError: null,
+  authErrorStatus: null
 };
 
 export function authReducer(state: IState = initialState, action: AuthActions.AuthActions) {
@@ -19,12 +21,15 @@ export function authReducer(state: IState = initialState, action: AuthActions.Au
       return {
         ...state,
         user: action.payload.user,
+        authError: null,
+        authErrorStatus: null,
         loading: false
       };
     case AuthActions.LOGIN_START:
       return {
         ...state,
         authError: null,
+        authErrorStatus: null,
         loading: true
       };
     case AuthActions.LOGIN_FAIL:
@@ -32,6 +37,7 @@ export function authReducer(state: IState = initialState, action: AuthActions.Au
         ...state,
         user: null,
         authError: action.payload.error,
+        authErrorStatus: action.payload.errorStatus,
         loading: false
       };
     default:

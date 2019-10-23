@@ -21,7 +21,6 @@ export class AuthService {
       .pipe(map(user => {
         if (user) {
           this.currentUser = user;
-          this.store.dispatch(new AuthActions.LoginSuccess({user: this.currentUser}));
         }
         return user;
       }),

@@ -19,39 +19,33 @@ export class ProductEffects {
   @Effect()
   loadProducts = this.actions$.pipe(
     ofType(ProductActions.LOAD_PRODUCTS_BEGIN),
-    switchMap(() => {
-      return this.productService.getProducts().pipe(
-        map(data => new ProductActions.LoadProductsSuccess({ products: data }))
-      );
-    }));
+    switchMap(() => this.productService.getProducts()),
+    map(data => new ProductActions.LoadProductsSuccess({ products: data }))
+  );
 
   @Effect()
   getProduct = this.actions$.pipe(
     ofType(ProductActions.GET_PRODUCT),
-    switchMap((data: ProductActions.GetProduct) => {
-      return this.productService.getProduct(data.payload.id)
-        .pipe(map((responseData: Product) =>
-          new ProductActions.GetProductSuccess({ product: responseData })));
-    })
+    switchMap((data: ProductActions.GetProduct) => this.productService.getProduct(data.payload.id)),
+    map((responseData: Product) =>
+      new ProductActions.GetProductSuccess({ product: responseData }))
   );
 
   @Effect()
   addProduct = this.actions$.pipe(
     ofType(ProductActions.ADD_PRODUCT),
-    switchMap((data: ProductActions.AddProduct) => {
-      return this.productService.addProduct(data.payload)
-        .pipe(map(responseData => new ProductActions.AddProductSuccess(responseData)),
-          tap(() => this.router.navigate(['/products'])));
-    })
-  );
+    switchMap((data: ProductActions.AddProduct) => this.productService.addProduct(data.payload)),
+    map(responseData => new ProductActions.AddProductSuccess(responseData)),
+    tap(() => this.router.navigate(['/products'])));
+
 
   @Effect()
   editProduct = this.actions$.pipe(
     ofType(ProductActions.EDIT_PRODUCT),
     switchMap((data: ProductActions.EditProduct) => {
       return this.productService.editProduct(data.payload.product)
-        .pipe(map(() => new ProductActions.EditProductSuccess({id: data.payload.id, product: data.payload.product})),
-        tap(() => this.router.navigate(['/products'])));
+        .pipe(map(() => new ProductActions.EditProductSuccess({ id: data.payload.id, product: data.payload.product })),
+          tap(() => this.router.navigate(['/products'])));
     })
   );
 
@@ -60,8 +54,8 @@ export class ProductEffects {
     ofType(ProductActions.DELETE_PRODUCT),
     switchMap((data: ProductActions.DeleteProduct) => {
       return this.productService.deleteProduct(data.payload)
-      .pipe(map(() => new ProductActions.DeleteProductSuccess(data.payload)),
-      tap(() => this.router.navigate(['/products'])));
+        .pipe(map(() => new ProductActions.DeleteProductSuccess(data.payload)),
+          tap(() => this.router.navigate(['/products'])));
     })
   );
 }

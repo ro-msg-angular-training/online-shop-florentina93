@@ -4,6 +4,7 @@ import { Product } from '../../../shared/types';
 import { Location } from '@angular/common';
 import { ValidationService } from '../../../shared/service/validation.service';
 import * as ProductActions from '../store/product.actions';
+import * as ShoppingCartActions from '../../shopping-cart/store/shopping-cart.actions';
 import * as fromApp from '../../../store/app.reducer';
 import { Store } from '@ngrx/store';
 
@@ -47,7 +48,7 @@ export class ProductEditorComponent implements OnInit {
     this.product.description = formValues.description;
 
     this.store.dispatch(new ProductActions.EditProduct({id: this.product.id, product: this.product}));
-    //   this.cartService.updateCartItems(this.product);
+    this.store.dispatch(new ShoppingCartActions.UpdateCartItems({product: this.product}));
   }
 
   onCancelClick() {
