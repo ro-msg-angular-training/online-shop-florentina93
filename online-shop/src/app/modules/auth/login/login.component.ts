@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../../../core/http/auth/auth.service';
 import { first } from 'rxjs/operators';
@@ -7,18 +7,20 @@ import { User } from '../../../shared/types';
 import * as fromApp from '../../../store/app.reducer';
 import { Store } from '@ngrx/store';
 import * as AuthActions from '../../auth/store/auth.actions';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   loginForm: FormGroup;
   submitted = false;
   currentUser: User;
   errorMessage: string = null;
   isLoading = false;
+  subscriptions: Subscription = new Subscription();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -44,7 +46,7 @@ export class LoginComponent implements OnInit {
       return;
     }
     this.isLoading = true;
-    this.authService.login(this.form.username.value, this.form.password.value)
+    this.subscriptions.add(this.authService.login(this.form.username.value, this.form.password.value)
       .pipe(first())
       .subscribe(
         user => {
@@ -56,7 +58,7 @@ export class LoginComponent implements OnInit {
         error => {
           this.errorMessage = this.getErrorMessageByStatus(error.status);
           this.isLoading = false;
-        });
+        }));
     console.log(this.form);
   }
 
@@ -69,5 +71,8 @@ export class LoginComponent implements OnInit {
         return 'An unknown error occured!';
       }
     }
+  }
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 }

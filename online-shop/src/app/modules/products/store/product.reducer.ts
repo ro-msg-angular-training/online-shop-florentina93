@@ -7,6 +7,8 @@ export interface IState {
   editedProduct: Product;
   editedProductIndex: number;
   loading: boolean;
+  productsMap: {[id: number]: Product};
+  selectedProductId: number;
 }
 
 const initialState: IState = {
@@ -14,7 +16,9 @@ const initialState: IState = {
   productDetail: null,
   editedProduct: null,
   editedProductIndex: -1,
-  loading: false
+  loading: false,
+  productsMap: null,
+  selectedProductId: null
 };
 
 export function productReducer(state: IState = initialState, action: ProductListActions.ProductActionsUnion) {
@@ -30,8 +34,8 @@ export function productReducer(state: IState = initialState, action: ProductList
         ...state,
         loading: false,
         products: action.payload.products
-      };
-    }
+    };
+  }
     case ProductListActions.GET_PRODUCT_SUCCESS: {
       return {
         ...state,
@@ -51,6 +55,9 @@ export function productReducer(state: IState = initialState, action: ProductList
         ...state,
         products: updatedProducts,
         productDetail: action.payload.product
+        // ...state,
+        // productsMap: {...state.productsMap,
+        // [action.payload.id]: action.payload.product}
       };
     case ProductListActions.DELETE_PRODUCT_SUCCESS:
       return {

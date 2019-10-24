@@ -4,9 +4,7 @@ import { map, catchError } from 'rxjs/operators';
 import { throwError, Observable } from 'rxjs';
 import { User } from '../../../shared/types';
 import { LOGIN_URL } from 'src/app/shared/constants';
-import { Store } from '@ngrx/store';
-import * as fromApp from '../../../store/app.reducer';
-import * as AuthActions from '../../../modules/auth/store/auth.actions';
+
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +12,7 @@ import * as AuthActions from '../../../modules/auth/store/auth.actions';
 export class AuthService {
   currentUser: User;
 
-  constructor(private httpClient: HttpClient, private store: Store<fromApp.IAppState>) { }
+  constructor(private httpClient: HttpClient) { }
 
   login(username: string, password: string): Observable<User> {
     return this.httpClient.post<User>(LOGIN_URL, { username, password })
