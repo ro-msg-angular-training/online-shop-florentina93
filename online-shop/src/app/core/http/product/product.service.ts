@@ -25,13 +25,13 @@ export class ProductService {
   getProduct(id: number): Observable<Product> {
    return this.httpClient.get<Product>(`${PRODUCTS_URL}/${id}`);
   }
-  deleteProduct(id: number): Observable<Product> {
-    return this.httpClient.delete<Product>(`${PRODUCTS_URL}/${id}`, this.httpOptions)
+  deleteProduct(id: number): Observable<void> {
+    return this.httpClient.delete<void>(`${PRODUCTS_URL}/${id}`, this.httpOptions)
       .pipe(retry(1));
   }
-  editProduct(product: Product): Observable<Product> {
+  editProduct(product: Product): Observable<void> {
     const id = product.id;
-    return this.httpClient.put<Product>(`${PRODUCTS_URL}/${id}`, product, this.httpOptions)
+    return this.httpClient.put<void>(`${PRODUCTS_URL}/${id}`, product, this.httpOptions)
         .pipe(retry(1));
   }
   addProduct(product: Product): Observable<Product> {

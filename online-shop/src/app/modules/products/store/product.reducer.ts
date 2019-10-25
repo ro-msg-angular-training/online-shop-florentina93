@@ -48,16 +48,8 @@ export function productReducer(state: IState = initialState, action: ProductList
         products: [...state.products, action.payload]
       };
     case ProductListActions.EDIT_PRODUCT_SUCCESS:
-      const productIndex = state.products.findIndex(product => product.id === action.payload.id);
-      const updatedProducts = [...state.products];
-      updatedProducts[productIndex] = action.payload.product;
       return {
         ...state,
-        products: updatedProducts,
-        productDetail: action.payload.product
-        // ...state,
-        // productsMap: {...state.productsMap,
-        // [action.payload.id]: action.payload.product}
       };
     case ProductListActions.DELETE_PRODUCT_SUCCESS:
       return {

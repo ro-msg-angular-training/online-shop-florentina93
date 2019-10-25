@@ -47,7 +47,6 @@ export class EditProduct implements Action {
 
 export class EditProductSuccess implements Action {
   readonly type = EDIT_PRODUCT_SUCCESS;
-  constructor(public payload: { id: number, product: Product }) { }
 
 }
 

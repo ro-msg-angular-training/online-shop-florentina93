@@ -46,7 +46,9 @@ export function shoppingCartReducers(state: IState = initialState, action: Shopp
     case ShoppingCartActions.UPDATE_CART_ITEMS: {
       const itemIndex = state.cartItems.findIndex(item => item.productId === action.payload.product.id);
       const updatedItems = [...state.cartItems];
-      updatedItems[itemIndex].product = action.payload.product;
+      if (itemIndex > -1) {
+        updatedItems[itemIndex].product = action.payload.product;
+      }
       return {
         ...state,
         cartItems: updatedItems

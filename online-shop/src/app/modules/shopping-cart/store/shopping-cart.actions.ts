@@ -54,7 +54,6 @@ export class CheckoutCartItems implements Action {
 
 export class CheckoutCartItemsSuccess implements Action {
   readonly type = CHECKOUT_CART_ITEMS_SUCCESS;
-  constructor(public payload: {order: Order}) {}
 }
 
 export class CheckoutCartItemsFail implements Action {

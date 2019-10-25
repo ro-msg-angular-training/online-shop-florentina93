@@ -43,10 +43,10 @@ export class ProductEffects {
   editProduct = this.actions$.pipe(
     ofType(ProductActions.EDIT_PRODUCT),
     switchMap((data: ProductActions.EditProduct) => {
-      return this.productService.editProduct(data.payload.product)
-        .pipe(map(() => new ProductActions.EditProductSuccess({ id: data.payload.id, product: data.payload.product })),
-          tap(() => this.router.navigate(['/products'])));
-    })
+      return this.productService.editProduct(data.payload.product);
+    }),
+    map(() => new ProductActions.EditProductSuccess()),
+    tap(() => this.router.navigate(['/products']))
   );
 
   @Effect()

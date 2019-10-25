@@ -17,6 +17,7 @@ import { LoadingSpinnerComponent } from './shared/component/loading-spinner/load
 import { EffectsModule } from '@ngrx/effects';
 import { appEffects } from './store/app.effects';
 import * as fromApp from './store/app.reducer';
+import {StoreDevtoolsModule} from '@ngrx/store-devtools';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import * as fromApp from './store/app.reducer';
     HttpClientModule,
     StoreModule.forRoot(fromApp.appReducer),
     EffectsModule.forRoot(appEffects),
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    StoreDevtoolsModule.instrument({maxAge: 25})
   ],
   providers: [
       // no need to place any providers due to the `providedIn` flag...

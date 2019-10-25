@@ -1,11 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { ProductService } from '../../../core/http/product/product.service';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Product, User, Role } from '../../../shared/types';
 import { AuthService } from '../../../core/http/auth/auth.service';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
 import * as fromApp from '../../../store/app.reducer';
 import * as ProductActions from '../store/product.actions';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -13,10 +12,12 @@ import * as ProductActions from '../store/product.actions';
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.css']
 })
-export class ProductListComponent implements OnInit {
+export class ProductListComponent implements OnInit, OnDestroy {
+
   private products: Product[];
   private isCustomer = false;
   private isAdmin = false;
+  private subscription: Subscription = new Subscription();
 
   constructor(
     private authService: AuthService,
@@ -39,7 +40,10 @@ export class ProductListComponent implements OnInit {
 
   initProductList(): void {
     this.store.dispatch(new ProductActions.LoadProductsBegin());
-    this.store.select(state => state.productList).subscribe(data => this.products = data.products);
+    this.subscription.add(this.store.select(state => state.productState).subscribe(data => this.products = data.products));
   }
 
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
 }

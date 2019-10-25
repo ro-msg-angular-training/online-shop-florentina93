@@ -6,15 +6,13 @@ import * as fromShoppingCart from '../modules/shopping-cart/store/shopping-cart.
 import { ActionReducerMap } from '@ngrx/store';
 
 export interface IAppState {
-  productList: fromProducts.IState;
-  productDetail: fromProducts.IState;
+  productState: fromProducts.IState;
   auth: fromAuth.IState;
-  cartItems: fromShoppingCart.IState;
+  cartState: fromShoppingCart.IState;
 }
 
 export const appReducer: ActionReducerMap<IAppState> = {
-  productList: fromProducts.productReducer,
-  productDetail: fromProducts.productReducer,
+  productState: fromProducts.productReducer,
   auth: fromAuth.authReducer,
-  cartItems: fromShoppingCart.shoppingCartReducers
+  cartState: fromShoppingCart.shoppingCartReducers
 };

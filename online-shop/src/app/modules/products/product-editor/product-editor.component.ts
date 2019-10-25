@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Product } from '../../../shared/types';
 import { Location } from '@angular/common';
@@ -7,15 +7,18 @@ import * as ProductActions from '../store/product.actions';
 import * as ShoppingCartActions from '../../shopping-cart/store/shopping-cart.actions';
 import * as fromApp from '../../../store/app.reducer';
 import { Store } from '@ngrx/store';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-product-editor',
   templateUrl: './product-editor.component.html',
   styleUrls: ['./product-editor.component.css']
 })
-export class ProductEditorComponent implements OnInit {
+export class ProductEditorComponent implements OnInit, OnDestroy {
+
   product: Product;
   productForm: FormGroup;
+  private subscription: Subscription = new Subscription();
 
   constructor(
     private location: Location,
@@ -27,7 +30,9 @@ export class ProductEditorComponent implements OnInit {
   }
 
   initProductForm(): void {
-    this.store.select('productDetail').subscribe(data => this.product = data.productDetail);
+    this.subscription.add(
+      this.store.select(state => state.productState.productDetail)
+                .subscribe(data => this.product = data));
 
     this.productForm = new FormGroup({
       name: new FormControl(this.product.name, Validators.required),
@@ -55,4 +60,7 @@ export class ProductEditorComponent implements OnInit {
     this.location.back();
   }
 
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
 }

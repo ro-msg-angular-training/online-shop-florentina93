@@ -1,13 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CartItem, Product, ProductOrder } from '../../../shared/types';
-import { ShoppingCartService } from '../../../core/http/shopping-cart/shopping-cart.service';
-import { Router } from '@angular/router';
-import { first } from 'rxjs/operators';
 import { Location } from '@angular/common';
-import { CartService } from '../../../core/services/cart.service';
 import * as fromApp from '../../../store/app.reducer';
 import { Store } from '@ngrx/store';
 import * as ShoppingCartActions from '../store/shopping-cart.actions';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -15,30 +12,33 @@ import * as ShoppingCartActions from '../store/shopping-cart.actions';
   templateUrl: './shopping-cart.component.html',
   styleUrls: ['./shopping-cart.component.css']
 })
-export class ShoppingCartComponent implements OnInit {
+export class ShoppingCartComponent implements OnInit, OnDestroy {
+
   private cartItems: CartItem[];
   private errorMessage: string = null;
   private emptyShoppingCart = true;
   private checkoutDone = false;
+  private subscription: Subscription = new Subscription();
 
-  constructor(private shoppingCartService: ShoppingCartService,
-              private cartService: CartService,
-              private router: Router,
-              private location: Location,
-              private store: Store<fromApp.IAppState>) { }
+  constructor( private location: Location,
+               private store: Store<fromApp.IAppState>) { }
 
   ngOnInit() {
     this.initShoppingCartList();
   }
 
   initShoppingCartList(): void {
-    this.store.select('cartItems').subscribe(data => this.cartItems = data.cartItems);
+    this.store.dispatch(new ShoppingCartActions.GetCartItems());
+    this.subscription.add(this.store.select(state => state.cartState.cartItems).subscribe(data => {
+      this.cartItems = data;
+      console.log(data);
+    }));
     if (this.cartItems.length > 0) {
       this.emptyShoppingCart = false;
     }
   }
   deleteFromShoppingCart(product: Product): void {
-    this.store.dispatch(new ShoppingCartActions.DeleteCartItemSuccess({ id: product.id }));
+    this.store.dispatch(new ShoppingCartActions.DeleteCartItem({product}));
     if (this.cartItems.length === 0) {
       this.emptyShoppingCart = true;
     }
@@ -49,10 +49,10 @@ export class ShoppingCartComponent implements OnInit {
   onCheckoutClick() {
     const productsArr: ProductOrder[] = [];
     this.cartItems.forEach(item => {
-      productsArr.push({ productId: item.productId, quantity: item.quantity });
+      productsArr.push({ productId: +item.productId, quantity: item.quantity });
     });
     this.store.dispatch(new ShoppingCartActions.CheckoutCartItems({ productsOrder: productsArr }));
-    this.store.select('cartItems').subscribe(data => {
+    this.subscription.add(this.store.select(state => state.cartState).subscribe(data => {
       if (data.errorStatus) {
         if (data.errorStatus === 201) {
           this.checkoutDone = true;
@@ -61,7 +61,7 @@ export class ShoppingCartComponent implements OnInit {
         }
         this.emptyShoppingCart = true;
       }
-    });
+    }));
     console.log(this.cartItems);
   }
 
@@ -78,5 +78,9 @@ export class ShoppingCartComponent implements OnInit {
         return 'An unknown error occured!';
       }
     }
+  }
+
+  ngOnDestroy(): void {
+   this.subscription.unsubscribe();
   }
 }
