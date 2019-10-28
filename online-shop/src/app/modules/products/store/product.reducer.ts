@@ -11,7 +11,7 @@ export interface IState {
   selectedProductId: number;
 }
 
-const initialState: IState = {
+export const initialState: IState = {
   products: [],
   productDetail: null,
   editedProduct: null,

@@ -13,8 +13,7 @@ export class ProductEffects {
 
   constructor(private actions$: Actions,
               private productService: ProductService,
-              private router: Router,
-              private store: Store<fromApp.IAppState>) { }
+              private router: Router) { }
 
   @Effect()
   loadProducts = this.actions$.pipe(
