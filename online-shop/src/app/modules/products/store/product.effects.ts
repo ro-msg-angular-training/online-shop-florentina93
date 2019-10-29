@@ -3,8 +3,7 @@ import * as ProductActions from './product.actions';
 import { switchMap, map, tap } from 'rxjs/operators';
 import { ProductService } from '../../../core/http/product/product.service';
 import { Injectable } from '@angular/core';
-import * as fromApp from '../../../store/app.reducer';
-import { Store } from '@ngrx/store';
+
 import { Product } from 'src/app/shared/types';
 import { Router } from '@angular/router';
 

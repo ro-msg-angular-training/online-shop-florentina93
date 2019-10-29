@@ -3,12 +3,12 @@
     <app-loading-spinner></app-loading-spinner>
   </div>
   <form [formGroup]="loginForm" (ngSubmit)="onLoginClick()" *ngIf="!isLoading">
-    <h3>Sign in</h3>
+    <h3>SIGN IN</h3>
     <div class="alert alert-danger" *ngIf="errorMessage"><p>{{errorMessage}}</p></div>
     <div class="form-group">
       <label class="col-sm-6" for="username">User Name:</label>
       <div class="col-sm-3">
-        <input type="text" formControlName="username" class="form-control" />
+        <input type="text" name="username" formControlName="username" class="form-control" />
         <span class="help-block" *ngIf="form.username.invalid && form.username.touched">
            <span *ngIf="form.username.errors.required">Username is required</span>
           </span>
@@ -17,7 +17,7 @@
     <div class="form-group">
       <label class="col-sm-6" for="password">Password:</label>
       <div class="col-sm-3">
-        <input type="password" formControlName="password" class="form-control" />
+        <input type="password" name="password" formControlName="password" class="form-control" />
         <span *ngIf="form.password.invalid && form.password.touched" class="help-block">
             <span *ngIf="form.password.errors.required">Password is required</span>
         </span>
