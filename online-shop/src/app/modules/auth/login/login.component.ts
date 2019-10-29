@@ -1,11 +1,7 @@
+import { Store } from '@ngrx/store';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { AuthService } from '../../../core/http/auth/auth.service';
-import { first } from 'rxjs/operators';
-import { Router } from '@angular/router';
-import { User } from '../../../shared/types';
 import * as fromApp from '../../../store/app.reducer';
-import { Store } from '@ngrx/store';
 import * as AuthActions from '../../auth/store/auth.actions';
 import { Subscription } from 'rxjs';
 
@@ -17,16 +13,13 @@ import { Subscription } from 'rxjs';
 export class LoginComponent implements OnInit, OnDestroy {
   loginForm: FormGroup;
   submitted = false;
-  currentUser: User;
   errorMessage: string = null;
   isLoading = false;
   subscriptions: Subscription = new Subscription();
 
   constructor(
     private formBuilder: FormBuilder,
-    private authService: AuthService,
     private store: Store<fromApp.IAppState>,
-    private router: Router
   ) { }
 
   ngOnInit() {
@@ -46,20 +39,21 @@ export class LoginComponent implements OnInit, OnDestroy {
       return;
     }
     this.isLoading = true;
-    this.subscriptions.add(this.authService.login(this.form.username.value, this.form.password.value)
-      .pipe(first())
-      .subscribe(
-        user => {
-          this.currentUser = user;
-          console.log(user);
-          this.isLoading = false;
-          this.router.navigateByUrl('/products');
-        },
-        error => {
-          this.errorMessage = this.getErrorMessageByStatus(error.status);
-          this.isLoading = false;
-        }));
-    console.log(this.form);
+    this.subscriptions.add(this.store.dispatch(new AuthActions.LoginStart(
+      { username: this.form.username.value,
+        password: this.form.password.value
+      }
+    )));
+
+    this.subscriptions.add(this.store.select(state => state.auth).subscribe(response => {
+      if (response.fetchedUser) {
+        this.isLoading = response.loading;
+      }
+      if (response.authErrorStatus) {
+        this.errorMessage = this.getErrorMessageByStatus(response.authErrorStatus);
+        this.isLoading = response.loading;
+      }
+    }));
   }
 
   private getErrorMessageByStatus(status: number): string {

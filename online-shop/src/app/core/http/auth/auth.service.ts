@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, catchError } from 'rxjs/operators';
 import { throwError, Observable } from 'rxjs';
-import { User } from '../../../shared/types';
+import { User, Role } from '../../../shared/types';
 import { LOGIN_URL } from 'src/app/shared/constants';
 
 
@@ -27,5 +27,13 @@ export class AuthService {
 
   getCurrentUser(): any {
     return this.currentUser;
+  }
+
+  isAdmin(): boolean {
+   return this.currentUser.roles.includes(Role.ADMIN, 0);
+  }
+
+  isCustomer(): boolean {
+    return this.currentUser.roles.includes(Role.CUSTOMER, 0);
   }
 }

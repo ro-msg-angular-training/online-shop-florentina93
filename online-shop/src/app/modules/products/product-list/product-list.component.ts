@@ -25,17 +25,11 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.initProductList();
-    const user: User = this.authService.getCurrentUser();
-    if (user) {
-      const foundAdminRole = user.roles.find(role => role === Role.ADMIN);
-      const foundCustomerRole = user.roles.find(role => role === Role.CUSTOMER);
-      if (foundAdminRole) {
-        this.isAdmin = true;
-      }
-      if (foundCustomerRole) {
-        this.isCustomer = true;
-      }
-    }
+    this.isAdmin = this.authService.isAdmin();
+    this.isCustomer = this.authService.isCustomer();
+    this.subscription.add(this.store.select(state => state.auth.user).subscribe(response => {
+        console.log(response);
+    }));
   }
 
   initProductList(): void {

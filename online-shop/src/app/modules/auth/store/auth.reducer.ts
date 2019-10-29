@@ -4,6 +4,7 @@ import * as AuthActions from './auth.actions';
 export interface IState {
   user: User;
   loading: boolean;
+  fetchedUser: boolean;
   authError: string;
   authErrorStatus: number;
 }
@@ -11,6 +12,7 @@ export interface IState {
 const initialState: IState = {
   user: null,
   loading: false,
+  fetchedUser: false,
   authError: null,
   authErrorStatus: null
 };
@@ -23,7 +25,8 @@ export function authReducer(state: IState = initialState, action: AuthActions.Au
         user: action.payload.user,
         authError: null,
         authErrorStatus: null,
-        loading: false
+        loading: false,
+        fetchedUser: true
       };
     case AuthActions.LOGIN_START:
       return {

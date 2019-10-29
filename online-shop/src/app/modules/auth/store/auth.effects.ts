@@ -21,7 +21,7 @@ export class AuthEffects {
           map((resData: User) => {
             return new AuthActions.LoginSuccess({ user: resData });
           }),
-          // tap(() => this.router.navigate(['/products'])),
+          tap(() => this.router.navigate(['/products'])),
           catchError(error => {
             // ...later implementation
             return of(new AuthActions.LoginFail({ error: error.message, errorStatus: error.status}));
